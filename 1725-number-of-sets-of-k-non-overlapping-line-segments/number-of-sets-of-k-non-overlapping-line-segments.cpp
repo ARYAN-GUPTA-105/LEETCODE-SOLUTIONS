@@ -13,25 +13,24 @@ using vvii = vector<vector<int>>;
 class Solution {
 public:
     ll mod = 1e9 + 7;
-    ll helper(ll b, ll e){
-        ll ans = 1;
-        while(e > 0){
-            if(e & 1LL) ans = ans * b % mod;
-            b = b * b % mod;
-            e >>= 1LL;
+    ll dp[1005][1005][2];
+    ll helper(ll n, ll k, ll idx, ll st){
+        if(!k) return 1;
+        if(idx == n) return 0;
+        if(dp[idx][k][st] != -1) return dp[idx][k][st];
+        ll ans = 0;
+        if(st){
+            ans = (ans + helper(n,k-1,idx,false)) % mod;
+            ans = (ans + helper(n,k,idx+1,true)) % mod;
         }
-        return ans;
+        else{
+            ans = (ans + helper(n,k,idx+1,true)) % mod;
+            ans = (ans + helper(n,k,idx+1,false)) % mod;
+        }
+        return dp[idx][k][st] = ans;
     }
     int numberOfSets(ll n, ll k) {
-        ll x = n + k - 1;
-        ll r = 2 * k;
-        r = min(r,x-r);
-        ll num = 1, denum = 1;
-        f(i,1,r+1){
-            num = num * (x - r + i) % mod;
-            denum = denum * i % mod;
-        }
-        ll ide = helper(denum,mod-2);
-        return (num * ide % mod);
+        memset(dp,-1,sizeof(dp));
+        return helper(n,k,0,false);
     }
 };
