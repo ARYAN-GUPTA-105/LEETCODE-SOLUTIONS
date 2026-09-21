@@ -23,7 +23,7 @@ public:
                 ll a = (j * x) % k;
                 nxt[a] += dp[j];
             }
-            f(j, 0, k) { ans[j] += nxt[j]; }
+            f(j, 0, k) ans[j] += nxt[j]; 
             dp = nxt;
         }
         return ans;
